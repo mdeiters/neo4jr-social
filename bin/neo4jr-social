@@ -1,0 +1,86 @@
+#!/usr/bin/env jruby
+
+using_gems = false
+begin
+  require 'fileutils'
+  require 'tempfile'
+  require 'tmpdir'
+  require 'optparse'
+rescue LoadError => e
+  if using_gems
+    raise(e)
+  else
+    using_gems = true
+    require 'rubygems'
+    retry
+  end
+end
+
+working_directory = FileUtils.pwd
+neo4j_social_install = File.expand_path(File.join(File.dirname(__FILE__), '..'))
+
+port        = '8988'
+db_dir      = nil
+pid_dir     = working_directory
+log_file    = nil
+log_level   = 'OFF'
+min_memory  = '128m'
+max_memory  = '512m'
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: neo4jr-social start [options]"
+
+  opts.on '-p', '--port=PORT', 'Port on which to run Neo4jr-social (default 8333)' do |p|
+    port = p
+  end
+
+  opts.on '-d', '--database=DIRECTORY', 'directory where the neo4jr database is located' do |d|
+    db_dir = File.expand_path(d)
+  end
+
+  opts.on '--pid-dir=PID_DIR', 'Directory for pid files' do |pd|
+    pid_dir = File.expand_path(pd)
+  end
+
+  opts.on '-l', '--log-level=LOG_LEVEL', 'Neo4jr-social logging level' do |l|
+    log_level = l
+  end
+
+  opts.on '--log-file=LOG_FILE', 'Path to Neo4jr-social log file' do |lf|
+    log_file = File.expand_path(lf)
+  end
+  
+  opts.on '--max-memory=MEMORY', 'Specify the maximum size of the memory allocation pool' do |mm|
+    max_memory = mm
+  end
+  
+  opts.on '--min-memory=MEMORY', 'Specify the initial size of the memory allocation pool' do |mm|
+    min_memory = mm
+  end
+end.parse!
+
+options = { :dir_mode => :normal, :dir => pid_dir }
+
+def logging_properties( log_file, log_level )
+  temp_file = Tempfile.new 'logging.properties'
+  temp_file << <<PROPERTIES
+.level = #{log_level}
+handlers = java.util.logging.FileHandler
+java.util.logging.FileHandler.formatter = java.util.logging.SimpleFormatter
+java.util.logging.FileHandler.pattern   = #{log_file}
+PROPERTIES
+  temp_file.flush
+  temp_file.close
+  temp_file.path
+end
+
+args = ['java']
+args << "-Xms#{min_memory}"
+args << "-Xmx#{max_memory}"
+args << "-Djetty.port=#{port}" if port
+args << "-Djetty.home=#{File.join(neo4j_social_install, 'jetty-runtime')}"
+args << "-Dneo4jr.database=#{db_dir}" if db_dir
+args << "-Djava.util.logging.config.file=#{logging_properties(log_file, log_level)}" if log_file and log_level != 'OFF'
+args << '-jar' << File.join(neo4j_social_install, 'jetty-runtime', 'start.jar')
+STDERR.puts(args * ' ')
+Kernel.exec(*args)

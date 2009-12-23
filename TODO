@@ -1,0 +1,15 @@
+* Self-Contained Easy Start/Stop/Restart executable
+* documentation
+* vendor-ize ruby libs into WEB-INF
+* support querying off multiple relationship types (i.e. /nodes/:node_id/path )
+* primitive querying on /nodes
+* Most Popular type query
+* More solr type queries with lt gt eq etc
+* Amazon Search => get '/nodes/:node_id/similar' (Person:A => Taxonomy:A <= Person:B => Taxonome:C)
+* Run under tomcat: http://blog.nicksieger.com/articles/2008/05/08/introducing-jruby-rack 
+# http://caldersphere.rubyforge.org/warbler/
+
+
+# LinkedIn Degrees of Seperation
+# Facebook Friend Suggestions
+# Daemonize Java
