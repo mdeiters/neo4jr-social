@@ -1,11 +1,11 @@
-#Ensure service is running at port 4567
+# neo4jr-social start -p8988
 
 require 'rubygems'
 require 'httparty'
 
 class Facebook
   include HTTParty
-  base_uri 'http://localhost:4567'
+  base_uri 'http://localhost:8988/neo4jr-social'
   format :json
   
   class << self

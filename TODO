@@ -1,6 +1,6 @@
-* Self-Contained Easy Start/Stop/Restart executable
 * documentation
-* vendor-ize ruby libs into WEB-INF
+  # LinkedIn Degrees of Seperation
+  # Facebook Friend Suggestions
 * support querying off multiple relationship types (i.e. /nodes/:node_id/path )
 * primitive querying on /nodes
 * Most Popular type query
@@ -9,7 +9,5 @@
 * Run under tomcat: http://blog.nicksieger.com/articles/2008/05/08/introducing-jruby-rack 
 # http://caldersphere.rubyforge.org/warbler/
 
+* vendor-ize ruby libs into WEB-INF
 
-# LinkedIn Degrees of Seperation
-# Facebook Friend Suggestions
-# Daemonize Java

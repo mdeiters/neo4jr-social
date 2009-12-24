@@ -1,3 +1,5 @@
+# http://wiki.github.com/technicalpickles/jeweler/customizing-your-projects-gem-specification
+
 require 'rubygems'
 require 'rake'
 
@@ -11,6 +13,11 @@ begin
     gem.homepage = "http://github.com/mdeiters/neo4jr-social"
     gem.authors = ["Matthew Deiters"]
     gem.add_development_dependency "rspec", ">= 1.2.9"
+    gem.add_development_dependency "httparty"
+    gem.add_dependency 'neo4jr-simple'
+    gem.add_dependency 'sinatra'
+    gem.add_dependency 'json_pure'
+    
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
@@ -57,6 +64,6 @@ end
 
 namespace :development do
   task :start => :warify do
-    `bin/neo4jr-social start`
+    `bin/start-neo4jr-social`
   end
 end
