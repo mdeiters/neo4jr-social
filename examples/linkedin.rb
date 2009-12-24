@@ -15,7 +15,7 @@ def make_mutual_friends(node1, node2)
 end
 
 def degrees_of_seperation(start_node, destination_node)
-  url = "http://localhost:8988/neo4jr-social/nodes/#{start_node['node_id']}/path?to=#{destination_node['node_id']}&type=friends&depth=3&direction=outgoing"
+  url = "http://localhost:8988/neo4jr-social/nodes/#{start_node['node_id']}/paths?to=#{destination_node['node_id']}&type=friends&depth=3&direction=outgoing"
   response = RestClient.get(url)
   JSON.parse(response)
 end

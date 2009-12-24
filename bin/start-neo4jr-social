@@ -1,4 +1,4 @@
-#!/usr/bin/env jruby-1.4.0
+#!/usr/bin/env jruby
 
 using_gems = false
 begin

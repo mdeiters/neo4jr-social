@@ -36,13 +36,13 @@ Run start-neo4jr-social --help to see all options
 All results returned will be in JSON
   
 ==== GET /info
-Returns details about the Neo4jr database like the location of the database and the number of nodes.
+Returns details about the Neo4j database like the location of the database and the number of nodes.
   
 ==== GET /nodes
 Returns all nodes in the database. Use this method with caution, this could crash your server if you have a database with more then a few thousand nodes.
   
 ==== POST /nodes
-Creates a new node in the neo4jr database. Any parameters based in the body of the POST will be treated as properties for the node and will be stored in the database.
+Creates a new node in the neo4j database. Any parameters based in the body of the POST will be treated as properties for the node and will be stored in the database.
   
 ==== GET /nodes/:node_id
 Returns the properties for the specified node, where :node_id is the numeric id for the node
@@ -63,7 +63,7 @@ Creates a relations for the specified node, where :node_id is the numeric id for
 Returns relationships to other nodes for the specified node, where :node_id is the numeric id for the node.
   * Optional: type - Specify a type if only certain relationships are of interest
   
-==== GET /nodes/:node_id/path
+==== GET /nodes/:node_id/paths
 This returns all the ways two nodes are connected to each other and is similar to LinkedIn's degrees of separation. 
   * Required: to - the id of the node that your trying to find a path to from the starting node, :node_id
   * Required: type - the type of relationships between nodes to follow

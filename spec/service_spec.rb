@@ -52,17 +52,70 @@ describe Neo4jr::Service do
     relationship['type'].should == 'acted_in'
     relationship['to'].should == movie['node_id']
   end
+    
+  describe 'querying paths' do
+    let(:hoffman) { post('/nodes', {:name => 'Philip Seymour Hoffman'}) && response_to_ruby }
+    let(:fey)     { post( '/nodes', {:name => 'Tina Fey'}) && response_to_ruby}
+    let(:hanks)   { post( '/nodes', {:name => 'Tom Hanks'}) && response_to_ruby}
+    let(:murphy)  { post( '/nodes', {:name => 'Brittney Murphy'}) && response_to_ruby}
+    let(:bale)    { post( '/nodes', {:name => 'Christian Bale'}) && response_to_ruby}
+    let(:cruise)  { post( '/nodes', {:name => 'Tom Cruise'}) && response_to_ruby}
+    
+    before :each do
+      @create_mutual_friends = Proc.new do |node1, node2|
+        post "/nodes/#{node1['node_id']}/relationships", { :to => node2['node_id'], :type => 'friends' }
+        post "/nodes/#{node2['node_id']}/relationships", { :to => node1['node_id'], :type => 'friends' }
+      end
+      
+      @create_mutual_friends.call(hoffman, fey)
+      @create_mutual_friends.call(hoffman, murphy)
+      @create_mutual_friends.call(murphy, fey)
+      @create_mutual_friends.call(murphy, hanks)
+      @create_mutual_friends.call(hanks, bale)
+    end
+    
+    describe 'suggestions' do
+      it "gets my friend's friends that I'm not friends with as suggestions" do
+        get "/nodes/#{hoffman['node_id']}/recommendations?type=friends"
+        last_response.status.should == 200
+        suggestions = response_to_ruby
+        suggestions.size.should == 1
+        suggestions.first['name'].should == 'Tom Hanks'
+      end
+
+      it "gets my friend's friend's friends that I'm not friends with as suggestions" do
+        get "/nodes/#{hoffman['node_id']}/recommendations?type=friends&level=2"
+        last_response.status.should == 200
+        suggestions = response_to_ruby
+        suggestions.size.should == 1
+        suggestions.first['name'].should == 'Christian Bale'
+      end    
+    end
+    
+    it 'retrieves only shortest path between nodes' do
+      @create_mutual_friends.call(fey, cruise)
+      @create_mutual_friends.call(hanks, cruise)
+      
+      get "/nodes/#{hoffman['node_id']}/shortest_path?type=friends&to=#{cruise['node_id']}"
+      path_to_cruise = response_to_ruby
+      path_to_cruise[0]['name'].should == 'Philip Seymour Hoffman'
+      path_to_cruise[1]['type'].should == 'friends'
+      path_to_cruise[2]['name'].should == 'Tina Fey'
+      path_to_cruise[3]['type'].should == 'friends'
+      path_to_cruise[4]['name'].should == 'Tom Cruise'
+    end    
+  end
   
-  describe 'degrees of seperation using shortest path' do
+  describe 'getting paths between nodes' do
     let(:actor1) { post('/nodes', {:name => 'Philip Seymour Hoffman'}) && response_to_ruby }
     let(:actor2) { post('/nodes', {:name => 'Tina Fey'}) && response_to_ruby}
     let(:movie)  { post('/nodes', {:title => 'The Invention of Lying'}) && response_to_ruby}
     
-    it 'determines degrees of seperation between nodes like LinkedIn' do
+    it 'determines all degrees of seperation between nodes like LinkedIn' do
       post "/nodes/#{actor1['node_id']}/relationships", { :to => movie['node_id'], :type => 'acted_in', :year => 2009 }
       post "/nodes/#{actor2['node_id']}/relationships", { :to => movie['node_id'], :type => 'acted_in', :year => 2009 }
 
-      get "/nodes/#{actor1['node_id']}/path", { :to => actor2['node_id'], :type => 'acted_in'} 
+      get "/nodes/#{actor1['node_id']}/paths", { :to => actor2['node_id'], :type => 'acted_in'} 
       last_response.status.should == 200
       paths = response_to_ruby
       first_path = paths.first
@@ -70,43 +123,5 @@ describe Neo4jr::Service do
       first_path[2]['title'].should == 'The Invention of Lying'
       first_path[4]['name'].should == 'Tina Fey'
     end
-    
-  end
-  
-  describe 'suggestions' do
-    let(:hoffman) { post('/nodes', {:name => 'Philip Seymour Hoffman'}) && response_to_ruby }
-    let(:fey)     { post( '/nodes', {:name => 'Tina Fey'}) && response_to_ruby}
-    let(:hanks)   { post( '/nodes', {:name => 'Tom Hanks'}) && response_to_ruby}
-    let(:murphy)  { post( '/nodes', {:name => 'Brittney Murphy'}) && response_to_ruby}
-    let(:bale)    { post( '/nodes', {:name => 'Christian Bale'}) && response_to_ruby}
-    
-    before :each do
-      create_mutual_friends = Proc.new do |node1, node2|
-        post "/nodes/#{node1['node_id']}/relationships", { :to => node2['node_id'], :type => 'friends' }
-        post "/nodes/#{node2['node_id']}/relationships", { :to => node1['node_id'], :type => 'friends' }
-      end
-      
-      create_mutual_friends.call(hoffman, fey)
-      create_mutual_friends.call(hoffman, murphy)
-      create_mutual_friends.call(murphy, fey)
-      create_mutual_friends.call(murphy, hanks)
-      create_mutual_friends.call(hanks, bale)
-    end
-    
-    it "gets my friend's friends that I'm not friends with as suggestions" do
-      get "/nodes/#{hoffman['node_id']}/recommendations?type=friends"
-      last_response.status.should == 200
-      suggestions = response_to_ruby
-      suggestions.size.should == 1
-      suggestions.first['name'].should == 'Tom Hanks'
-    end
-
-    it "gets my friend's friend's friends that I'm not friends with as suggestions" do
-      get "/nodes/#{hoffman['node_id']}/recommendations?type=friends&level=2"
-      last_response.status.should == 200
-      suggestions = response_to_ruby
-      suggestions.size.should == 1
-      suggestions.first['name'].should == 'Christian Bale'
-    end    
   end
 end

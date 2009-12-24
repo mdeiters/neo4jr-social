@@ -63,12 +63,11 @@ module Neo4jr
       relationships.to_json
     end
 
-    #optional direction & depth
-    get '/nodes/:node_id/path' do
+    get '/nodes/:node_id/paths' do
       paths = Neo4jr::DB.execute do |neo|
-        relationship  = Neo4jr::RelationshipType.instance(params.delete('type'))
         start_node    = neo.getNodeById(params.delete('node_id'))
         end_node      = neo.getNodeById(params.delete('to'))
+        relationship  = Neo4jr::RelationshipType.instance(params.delete('type'))
         depth         = params.delete('depth') || 2
         direction     = Neo4jr::Direction.from_string(params.delete('direction') || 'both')
         shortest_path = AllSimplePaths.new(start_node, end_node, depth.to_i, direction, relationship.to_a)
@@ -78,7 +77,25 @@ module Neo4jr
       paths.to_json
     end
     
-    #optional
+    get '/nodes/:node_id/shortest_path' do
+      path = Neo4jr::DB.execute do |neo|
+        start_node    = neo.getNodeById(params.delete('node_id'))
+        end_node      = neo.getNodeById(params.delete('to'))
+        relationship  = Neo4jr::RelationshipType.instance(params.delete('type'))
+        dijkstra = Neo4jr::Dijkstra.new(
+          0.0,
+          start_node,
+          end_node,
+          Neo4jr::SimpleEvaluator.new,
+          DoubleAdder.new,
+          DoubleComparator.new,
+          Direction::BOTH,
+          relationship.to_a)
+        dijkstra.getPath.map{|n| n.to_hash }
+      end
+      path.to_json
+    end
+    
     get '/nodes/:node_id/recommendations' do
       suggestions = Neo4jr::DB.execute do |neo|
         relationship = Neo4jr::RelationshipType.incoming(params.delete('type'))
