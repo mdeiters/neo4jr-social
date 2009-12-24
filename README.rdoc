@@ -8,16 +8,16 @@ Neo4jr-Social was built in JRuby but is language agnostic and is designed to run
 
 === Prerequisites
 * Java
-* JRuby: http://jruby.org/
+* JRuby: http://jruby.org
 
 === Installing
-1. Install Ruby Gem: json_pure
+* Install Ruby Gem: json_pure
   jgem install json_pure
-2. Install Ruby Gem: sinatra
+* Install Ruby Gem: sinatra
   jgem install sinatra
-3. Install Ruby Gem: neo4jr-simple
+* Install Ruby Gem: neo4jr-simple
   jgem install neo4jr-simple
-4. Install Ruby Gem: neo4jr-social
+* Install Ruby Gem: neo4jr-social
   jgem install neo4jr-simple
 
 === Starting Neo4jr-Social
@@ -30,35 +30,46 @@ You can also start the service and specify the directory of where the neo4j data
 
   start-neo4jr-social -p8988 -dsome_relative_or_absolute_directory
   
+Run start-neo4jr-social --help to see all options
+
 === API Overview
 All results returned will be in JSON
   
 * GET /info
   Returns details about the Neo4jr database like the location of the database and the number of nodes.
+  
 * GET /nodes
   Returns all nodes in the database. Use this method with caution, this could crash your server if you have a database with more then a few thousand nodes.
+  
 * POST /nodes
   Creates a new node in the neo4jr database. Any parameters based in the body of the POST will be treated as properties for the node and will be stored in the database.
+  
 * GET /nodes/:node_id
   Returns the properties for the specified node, where :node_id is the numeric id for the node
+  
 * PUT /nodes/:node_id  
   Updates the properties of the specified node, where :node_id is the numeric id for the node. Any parameters pased in the body of the PUT will be treated as properties for the node. If you add a new parameters (i.e. age=4) which previously were not on the node, neo4jr-social will still add that property to the node.
+  
 * DELETE /nodes/:node_id
   Deletes the specified node, where :node_id is the numeric id for the node.
+  
 * POST /nodes/:node_id/relationships
   Creates a relations for the specified node, where :node_id is the numeric id for the node. This is how you designate how two nodes are related to each other.
   * Required: to - this is the node id of the node you want to make a relationship to. This is a one-way relationship. If you want both nodes to be related to each other you will need to make individual POSTs for each direction of the relationship.
   * Required: type - this is the type of the relationship, i.e. 'friends'. This can be any string that is sensible in your domain. 
   * Optional: Any other parameters you supply in the body of the POST will be added as properties to the relationship. For example if you were making 'friend' relationships and wanted to add a date since the friendship started you could pass a 'since' parameter in the POST.
+  
 * GET /nodes/:node_id/relationships
   Returns relationships to other nodes for the specified node, where :node_id is the numeric id for the node.
   * Optional: type - Specify a type if only certain relationships are of interest
+  
 * GET /nodes/:node_id/path
   This returns all the ways two nodes are connected to each other and is similar to LinkedIn's degrees of separation. 
   * Required: to - the id of the node that your trying to find a path to from the starting node, :node_id
   * Required: type - the type of relationships between nodes to follow
   * Optional: depth - maximum degrees of separation to find, the default is 2 degrees. Note: There may be performance impacts if this number is to high.
   * Optional: direction - What direction of relationships to follow, the default is 'both'
+  
 * GET /nodes/:node_id/recommendations
   This returns node suggestions for the given :node_id. This is similar to facebook friend suggestions where your friend's friends that your not friends with are suggested to you. 
   * Required: type - the type of relationships between nodes to follow
