@@ -1,6 +1,6 @@
 = neo4jr-social
 
-Neo4jr-Social is a self contained HTTP REST + JSON interface to the graph database Neo4j. It is easy to think of Neo4jr-Social is to Neo4j like Solr is to the Lucene project. Neo4jr-Social supports simple dynamic node creation, building relationships between nodes and also includes a few common social networking queries out of the box (i.e. linkedin degrees of seperation and facebook friend suggestion) with more to come.
+Neo4jr-Social is a self contained HTTP REST + JSON interface to the graph database Neo4j. Neo4jr-Social supports simple dynamic node creation, building relationships between nodes and also includes a few common social networking queries out of the box (i.e. linkedin degrees of seperation and facebook friend suggestion) with more to come. Think of Neo4jr-Social is to Neo4j like Solr is to Lucene.
 
 Neo4jr-Social was built in JRuby but is language agnostic and is designed to run under Jetty or Tomcat. 
 
