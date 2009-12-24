@@ -21,14 +21,13 @@ neo4j_social_install = File.expand_path(File.join(File.dirname(__FILE__), '..'))
 
 port        = '8988'
 db_dir      = nil
-pid_dir     = working_directory
 log_file    = nil
 log_level   = 'OFF'
 min_memory  = '128m'
 max_memory  = '512m'
 
 OptionParser.new do |opts|
-  opts.banner = "Usage: neo4jr-social start [options]"
+  opts.banner = "Usage: start-neo4jr-social [options]"
 
   opts.on '-p', '--port=PORT', 'Port on which to run Neo4jr-social (default 8333)' do |p|
     port = p
@@ -37,11 +36,7 @@ OptionParser.new do |opts|
   opts.on '-d', '--database=DIRECTORY', 'directory where the neo4jr database is located' do |d|
     db_dir = File.expand_path(d)
   end
-
-  opts.on '--pid-dir=PID_DIR', 'Directory for pid files' do |pd|
-    pid_dir = File.expand_path(pd)
-  end
-
+  
   opts.on '-l', '--log-level=LOG_LEVEL', 'Neo4jr-social logging level' do |l|
     log_level = l
   end
@@ -58,8 +53,6 @@ OptionParser.new do |opts|
     min_memory = mm
   end
 end.parse!
-
-options = { :dir_mode => :normal, :dir => pid_dir }
 
 def logging_properties( log_file, log_level )
   temp_file = Tempfile.new 'logging.properties'

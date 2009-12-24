@@ -1,13 +1,8 @@
-* documentation
-  # LinkedIn Degrees of Seperation
-  # Facebook Friend Suggestions
-* support querying off multiple relationship types (i.e. /nodes/:node_id/path )
-* primitive querying on /nodes
-* Most Popular type query
-* More solr type queries with lt gt eq etc
-* Amazon Search => get '/nodes/:node_id/similar' (Person:A => Taxonomy:A <= Person:B => Taxonome:C)
-* Run under tomcat: http://blog.nicksieger.com/articles/2008/05/08/introducing-jruby-rack 
-# http://caldersphere.rubyforge.org/warbler/
-
-* vendor-ize ruby libs into WEB-INF
+* Validate requests, check parameters, etc
+* Figure out how we should handle the Neo4j node's classname
+* Query Type: Amazon Recommendations
+* Query Type: Most Popular
+* Query Type: Primitive dynamic querying on all nodes
+* Enable solr type parameters with lt gt eq etc
+* Explore vendor-ize all ruby libs into WEB-INF
 

@@ -19,6 +19,10 @@ module Neo4jr
       node.to_hash.to_json
     end
     
+    get '/nodes/:node_id' do
+      Neo4jr::DB.getNodeById(params.delete('node_id')).to_json
+    end
+      
     put '/nodes/:node_id' do
       node = Neo4jr::DB.execute do |neo|
         node = neo.getNodeById(params.delete('node_id'))
@@ -37,11 +41,12 @@ module Neo4jr
     get '/nodes/:node_id/relationships' do
       relationships = Neo4jr::DB.execute do |neo|
         node              = neo.getNodeById(params.delete('node_id'))
-        to_node           = neo.getNodeById(params.delete('to'))
-        relationship_type = RelationshipType.instance(params.delete('type'))
-        relationship      = node.create_relationship_to to_node, relationship_type
-        relationship.update_properties(params)
-        node.getRelationships(relationship_type.to_a).hashify_objects
+        if relationship_type = params.delete('type')
+          relationship_type = RelationshipType.instance(relationship_type)
+          node.getRelationships(relationship_type.to_a).hashify_objects
+        else
+          node.getRelationships.hashify_objects
+        end
       end
       relationships.to_json
     end
@@ -61,12 +66,12 @@ module Neo4jr
     #optional direction & depth
     get '/nodes/:node_id/path' do
       paths = Neo4jr::DB.execute do |neo|
-        relationship  = Neo4jr::RelationshipType.instances(params.delete('type'))
+        relationship  = Neo4jr::RelationshipType.instance(params.delete('type'))
         start_node    = neo.getNodeById(params.delete('node_id'))
         end_node      = neo.getNodeById(params.delete('to'))
         depth         = params.delete('depth') || 2
         direction     = Neo4jr::Direction.from_string(params.delete('direction') || 'both')
-        shortest_path = AllSimplePaths.new(start_node, end_node, depth.to_i, direction, relationship)
+        shortest_path = AllSimplePaths.new(start_node, end_node, depth.to_i, direction, relationship.to_a)
         paths = shortest_path.getPaths
         paths.map{|p| p.map{|n| n.to_hash }}
       end

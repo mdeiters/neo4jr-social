@@ -1,6 +1,8 @@
 module Neo4jr
   class Service < Sinatra::Base
             
+    # Returns information on the neo4j database like location of the database and number of nodes
+    #
     get '/info' do
       Neo4jr::DB.stats.to_json
     end
@@ -61,12 +63,12 @@ module Neo4jr
     #optional direction & depth
     get '/nodes/:node_id/path' do
       paths = Neo4jr::DB.execute do |neo|
-        relationship  = Neo4jr::RelationshipType.instances(params.delete('type'))
+        relationship  = Neo4jr::RelationshipType.instance(params.delete('type'))
         start_node    = neo.getNodeById(params.delete('node_id'))
         end_node      = neo.getNodeById(params.delete('to'))
         depth         = params.delete('depth') || 2
         direction     = Neo4jr::Direction.from_string(params.delete('direction') || 'both')
-        shortest_path = AllSimplePaths.new(start_node, end_node, depth.to_i, direction, relationship)
+        shortest_path = AllSimplePaths.new(start_node, end_node, depth.to_i, direction, relationship.to_a)
         paths = shortest_path.getPaths
         paths.map{|p| p.map{|n| n.to_hash }}
       end

@@ -7,13 +7,14 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "neo4jr-social"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.summary = %Q{A self-containted and lightweight REST interface to Neo4j using JRuby.}
+    gem.description = %Q{A self-containted and lightweight REST interface to Neo4j using JRuby.}
+    gem.description = %Q{A self-containted lightweight REST interface to Neo4j using JRuby }
     gem.email = "matthew_deiters@mckinsey.com"
     gem.homepage = "http://github.com/mdeiters/neo4jr-social"
     gem.authors = ["Matthew Deiters"]
     gem.add_development_dependency "rspec", ">= 1.2.9"
-    gem.add_development_dependency "httparty"
+    gem.add_development_dependency "rest-client"
     gem.add_dependency 'neo4jr-simple'
     gem.add_dependency 'sinatra'
     gem.add_dependency 'json_pure'

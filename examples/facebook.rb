@@ -1,40 +1,33 @@
 # neo4jr-social start -p8988
 
 require 'rubygems'
-require 'httparty'
+require 'json'
+require 'rest_client'
 
-class Facebook
-  include HTTParty
-  base_uri 'http://localhost:8988/neo4jr-social'
-  format :json
-  
-  class << self
-    def create_person(name)
-      post('/nodes', :body => {:name => name})
-    end
-
-    def make_mutual_friends(node1, node2)
-      post("/nodes/#{node1['node_id']}/relationships", :body => {:to => node2['node_id'], :type => 'friends'})
-      post("/nodes/#{node2['node_id']}/relationships", :body => {:to => node1['node_id'], :type => 'friends'})
-    end
-
-    def suggestions_for(start_node)
-      get("/nodes/#{start_node['node_id']}/recommendations?type=friends")
-    end
-  end
+def create_person(name)
+  JSON.parse RestClient.post( "http://localhost:8988/neo4jr-social/nodes", :name => name  )
 end
 
-johnathan = Facebook.create_person('Johnathan')
-mark      = Facebook.create_person('Mark')
-phill     = Facebook.create_person('Phill')
-mary      = Facebook.create_person('Mary')
-luke      = Facebook.create_person('Luke')
+def make_mutual_friends(node1, node2)
+  RestClient.post "http://localhost:8988/neo4jr-social/nodes/#{node1['node_id']}/relationships", :to => node2['node_id'], :type => 'friends'
+  RestClient.post "http://localhost:8988/neo4jr-social/nodes/#{node2['node_id']}/relationships", :to => node1['node_id'], :type => 'friends'
+end
 
-Facebook.make_mutual_friends(johnathan, mark)
-Facebook.make_mutual_friends(mark, mary)
-Facebook.make_mutual_friends(mark, phill)
-Facebook.make_mutual_friends(phill, mary)
-Facebook.make_mutual_friends(phill, luke)
+def suggestions_for(start_node)
+  JSON.parse RestClient.get("http://localhost:8988/neo4jr-social/nodes/#{start_node['node_id']}/recommendations?type=friends")
+end
 
-puts "Johnathan should become friends with #{Facebook.suggestions_for(johnathan).map{|n| n['name']}.join(', ')}"
+johnathan = create_person('Johnathan')
+mark      = create_person('Mark')
+phill     = create_person('Phill')
+mary      = create_person('Mary')
+luke      = create_person('Luke')
+
+make_mutual_friends(johnathan, mark)
+make_mutual_friends(mark, mary)
+make_mutual_friends(mark, phill)
+make_mutual_friends(phill, mary)
+make_mutual_friends(phill, luke)
+
+puts "Johnathan should become friends with #{suggestions_for(johnathan).map{|n| n['name']}.join(', ')}"
 #=> Johnathan should become friends with Mary, Phill
