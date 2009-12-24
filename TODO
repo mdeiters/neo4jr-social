@@ -1,3 +1,4 @@
+* Figure out a better way to shebang for start-neo4jr-social
 * Validate requests, check parameters, etc
 * Figure out how we should handle the Neo4j node's classname
 * Query Type: Amazon Recommendations

@@ -45,6 +45,7 @@ Gem::Specification.new do |s|
      "lib/neo4jr-social.rb",
      "lib/neo4jr-social/service.rb",
      "lib/neo4jr-social/version.rb",
+     "neo4jr-social.gemspec",
      "spec/service_spec.rb",
      "spec/spec.opts",
      "spec/spec_helper.rb",
@@ -74,20 +75,20 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
       s.add_development_dependency(%q<rspec>, [">= 1.2.9"])
-      s.add_development_dependency(%q<httparty>, [">= 0"])
+      s.add_development_dependency(%q<rest-client>, [">= 0"])
       s.add_runtime_dependency(%q<neo4jr-simple>, [">= 0"])
       s.add_runtime_dependency(%q<sinatra>, [">= 0"])
       s.add_runtime_dependency(%q<json_pure>, [">= 0"])
     else
       s.add_dependency(%q<rspec>, [">= 1.2.9"])
-      s.add_dependency(%q<httparty>, [">= 0"])
+      s.add_dependency(%q<rest-client>, [">= 0"])
       s.add_dependency(%q<neo4jr-simple>, [">= 0"])
       s.add_dependency(%q<sinatra>, [">= 0"])
       s.add_dependency(%q<json_pure>, [">= 0"])
     end
   else
     s.add_dependency(%q<rspec>, [">= 1.2.9"])
-    s.add_dependency(%q<httparty>, [">= 0"])
+    s.add_dependency(%q<rest-client>, [">= 0"])
     s.add_dependency(%q<neo4jr-simple>, [">= 0"])
     s.add_dependency(%q<sinatra>, [">= 0"])
     s.add_dependency(%q<json_pure>, [">= 0"])
