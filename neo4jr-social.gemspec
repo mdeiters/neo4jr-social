@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Matthew Deiters"]
-  s.date = %q{2009-12-24}
+  s.date = %q{2009-12-26}
   s.default_executable = %q{start-neo4jr-social}
   s.description = %q{A self-containted lightweight REST interface to Neo4j using JRuby }
   s.email = %q{matthew_deiters@mckinsey.com}
