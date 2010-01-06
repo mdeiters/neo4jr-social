@@ -18,7 +18,7 @@ Install Ruby Gem: sinatra
 Install Ruby Gem: neo4jr-simple
   jgem install neo4jr-simple
 Install Ruby Gem: neo4jr-social
-  jgem install neo4jr-simple
+  jgem install neo4jr-social
 
 === Starting Neo4jr-Social
 
