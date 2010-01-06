@@ -69,12 +69,23 @@ This returns all the ways two nodes are connected to each other and is similar t
   * Required: type - the type of relationships between nodes to follow
   * Optional: depth - maximum degrees of separation to find, the default is 2 degrees. Note: There may be performance impacts if this number is to high.
   * Optional: direction - What direction of relationships to follow, the default is 'both'
+
+==== GET /nodes/:node_id/shortest_path
+This returns the shortest path of two nodes that are connected to each other
+  * Required: to - the id of the node that your trying to find a path to from the starting node, :node_id
+  * Required: type - the type of relationships between nodes to follow
   
 ==== GET /nodes/:node_id/recommendations
 This returns node suggestions for the given :node_id. This is similar to facebook friend suggestions where your friend's friends that your not friends with are suggested to you. 
   * Required: type - the type of relationships between nodes to follow
   * Optional: level - the degree of separation that you want recommendations for, the default is 1 degree away which is similar to facebook's behavior
 
+
+== Troubleshooting
+  
+  /usr/bin/env: jruby: No such file or directory
+  
+  You need to either install jruby or if you used a utility like rvm then your jruby executable may actually be called jruby-1.4, if this is the case create an alias somewhere in your PATH
 == Contributors
 
 ====Matthew Deiters

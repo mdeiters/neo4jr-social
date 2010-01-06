@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{neo4jr-social}
-  s.version = "0.1.0"
+  s.version = "0.1.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Matthew Deiters"]
-  s.date = %q{2009-12-23}
+  s.date = %q{2009-12-26}
   s.default_executable = %q{start-neo4jr-social}
   s.description = %q{A self-containted lightweight REST interface to Neo4j using JRuby }
   s.email = %q{matthew_deiters@mckinsey.com}
@@ -44,6 +44,7 @@ Gem::Specification.new do |s|
      "jetty-runtime/webapps/neo4jr-social.war",
      "lib/neo4jr-social.rb",
      "lib/neo4jr-social/service.rb",
+     "lib/neo4jr-social/simple_cost_evaluator.rb",
      "lib/neo4jr-social/version.rb",
      "neo4jr-social.gemspec",
      "spec/service_spec.rb",
@@ -76,20 +77,20 @@ Gem::Specification.new do |s|
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
       s.add_development_dependency(%q<rspec>, [">= 1.2.9"])
       s.add_development_dependency(%q<rest-client>, [">= 0"])
-      s.add_runtime_dependency(%q<neo4jr-simple>, [">= 0"])
+      s.add_runtime_dependency(%q<neo4jr-simple>, [">= 0.1.6"])
       s.add_runtime_dependency(%q<sinatra>, [">= 0"])
       s.add_runtime_dependency(%q<json_pure>, [">= 0"])
     else
       s.add_dependency(%q<rspec>, [">= 1.2.9"])
       s.add_dependency(%q<rest-client>, [">= 0"])
-      s.add_dependency(%q<neo4jr-simple>, [">= 0"])
+      s.add_dependency(%q<neo4jr-simple>, [">= 0.1.6"])
       s.add_dependency(%q<sinatra>, [">= 0"])
       s.add_dependency(%q<json_pure>, [">= 0"])
     end
   else
     s.add_dependency(%q<rspec>, [">= 1.2.9"])
     s.add_dependency(%q<rest-client>, [">= 0"])
-    s.add_dependency(%q<neo4jr-simple>, [">= 0"])
+    s.add_dependency(%q<neo4jr-simple>, [">= 0.1.6"])
     s.add_dependency(%q<sinatra>, [">= 0"])
     s.add_dependency(%q<json_pure>, [">= 0"])
   end
