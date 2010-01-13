@@ -12,4 +12,3 @@ require 'json'
 require 'neo4jr-simple'
 require 'neo4jr-social/simple_cost_evaluator'
 require 'neo4jr-social/service'
-

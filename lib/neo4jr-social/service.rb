@@ -6,6 +6,10 @@ java_import org.neo4j.graphalgo.shortestpath.std.DoubleComparator
 module Neo4jr
   class Service < Sinatra::Base
 
+    get '/' do
+      'hello world, will be replaced by documenting service'
+    end
+    
     get '/info' do
       Neo4jr::DB.stats.to_json
     end
