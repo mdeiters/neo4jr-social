@@ -2,6 +2,7 @@ java_import org.neo4j.graphalgo.shortestpath.Dijkstra
 java_import org.neo4j.graphalgo.shortestpath.std.IntegerEvaluator
 java_import org.neo4j.graphalgo.shortestpath.std.DoubleAdder
 java_import org.neo4j.graphalgo.shortestpath.std.DoubleComparator
+java_import org.neo4j.api.core.DynamicRelationshipType
 
 module Neo4jr
   class Service < Sinatra::Base
@@ -9,7 +10,7 @@ module Neo4jr
     get '/' do
       'hello world, will be replaced by documenting service'
     end
-    
+
     get '/info' do
       Neo4jr::DB.stats.to_json
     end
@@ -45,6 +46,7 @@ module Neo4jr
     delete '/nodes/:node_id' do
       Neo4jr::DB.execute do |neo|
         node = neo.getNodeById(params['node_id'])
+        node.getRelationships.each {|r| r.delete}
         node.delete
       end
     end
@@ -78,31 +80,25 @@ module Neo4jr
       paths = Neo4jr::DB.execute do |neo|
         start_node = neo.getNodeById(params.delete('node_id'))
         end_node = neo.getNodeById(params.delete('to'))
-        relationship = Neo4jr::RelationshipType.instance(params.delete('type'))
-        depth = params.delete('depth') || 2
-        direction = Neo4jr::Direction.from_string(params.delete('direction') || 'both')
-        shortest_path = AllSimplePaths.new(start_node, end_node, depth.to_i, direction, relationship.to_a)
-        paths = shortest_path.getPaths
-        paths.map{|p| p.map{|n| n.to_hash }}
+        shortest_path = AllSimplePaths.new(start_node, end_node, depth, direction, relationship_types)
+        to_hash shortest_path.getPaths
       end
       paths.to_json
     end
 
+    get '/nodes/:node_id/dijkstra_paths' do
+      path = Neo4jr::DB.execute do |neo|
+        dijkstra = dijkstra neo
+        dijkstra.limitMaxNodesToTraverse(max_nodes)
+        dijkstra.limitMaxRelationShipsToTraverse(max_rel)
+        to_hash dijkstra.getPaths
+      end
+      path.to_json
+    end
+
     get '/nodes/:node_id/shortest_path' do
       path = Neo4jr::DB.execute do |neo|
-        start_node = neo.getNodeById(params.delete('node_id'))
-        end_node = neo.getNodeById(params.delete('to'))
-        relationship = Neo4jr::RelationshipType.instance(params.delete('type'))
-        dijkstra = Dijkstra.new(
-                0.0,
-                start_node,
-                end_node,
-                Neo4jr::SimpleEvaluator.new,
-                DoubleAdder.new,
-                DoubleComparator.new,
-                Direction::BOTH,
-                relationship.to_a)
-        dijkstra.getPath.map{|n| n.to_hash }
+        (p=dijkstra(neo).getPath) and p.map{|n| n.to_hash }
       end
       path.to_json
     end
@@ -120,6 +116,44 @@ module Neo4jr
         traverser.map{|node| node.to_hash }
       end
       suggestions.to_json
+    end
+
+    private
+    def dijkstra neo
+      Dijkstra.new(
+              0.0,
+              neo.getNodeById(params.delete('node_id')),
+              neo.getNodeById(params.delete('to')),
+              Neo4jr::SimpleEvaluator.new,
+              DoubleAdder.new,
+              DoubleComparator.new,
+              direction,
+              relationship_types)
+    end
+
+    def max_nodes
+      (params.delete('max_nodes') || 300).to_i
+    end
+
+    def max_rel
+      (params.delete('max_rel') || 20000).to_i
+    end
+
+    def depth
+      (params.delete('depth') || n).to_i
+    end
+
+    def direction
+      Neo4jr::Direction.from_string(params.delete('direction') || 'both')
+    end
+
+    def relationship_types
+      names = params.delete('type')
+      (names.nil? ? [] : [names].flatten.map {|name| DynamicRelationshipType.with_name(name)}).to_java(DynamicRelationshipType)
+    end
+
+    def to_hash paths
+      paths and paths.map{|p| p.map{|n| n.to_hash }}
     end
   end
 end
