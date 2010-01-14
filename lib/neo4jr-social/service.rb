@@ -1,11 +1,24 @@
-java_import org.neo4j.graphalgo.shortestpath.Dijkstra
-java_import org.neo4j.graphalgo.shortestpath.std.IntegerEvaluator
-java_import org.neo4j.graphalgo.shortestpath.std.DoubleAdder
-java_import org.neo4j.graphalgo.shortestpath.std.DoubleComparator
-java_import org.neo4j.api.core.DynamicRelationshipType
-
 module Neo4jr
   class Service < Sinatra::Base
+    # register SelfDocumentor
+    # 
+    # # not_found do
+    # # end
+    # 
+    # # error do
+    # # end
+    # 
+    # mime :json, 'application/json'
+    # 
+    # # before do
+    # #   content_type :json
+    # # end
+    # 
+    # describe 'HI thre'
+    # get '/|index' do
+    #   JsonPrinter.render(SelfDocumentor.output)
+    #   # JsonPrinter.render_html(SelfDocumentor.output)
+    # end
 
     get '/' do
       'hello world, will be replaced by documenting service'
@@ -119,16 +132,16 @@ module Neo4jr
     end
 
     private
-    def dijkstra neo
+    def dijkstra(neo)
       Dijkstra.new(
-              0.0,
-              neo.getNodeById(params.delete('node_id')),
-              neo.getNodeById(params.delete('to')),
-              Neo4jr::SimpleEvaluator.new,
-              DoubleAdder.new,
-              DoubleComparator.new,
-              direction,
-              relationship_types)
+        0.0,
+        neo.getNodeById(params.delete('node_id')),
+        neo.getNodeById(params.delete('to')),
+        Neo4jr::SimpleEvaluator.new,
+        DoubleAdder.new,
+        DoubleComparator.new,
+        direction,
+        relationship_types)
     end
 
     def max_nodes
