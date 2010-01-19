@@ -21,6 +21,9 @@ class JsonPrinter
     new(obj).buf
   end
   
+  def self.render_html(obj)
+    render(obj).gsub(' ', '&nbsp;').gsub("\n", "<br>")
+  end
   
   private
   
@@ -51,10 +54,6 @@ class JsonPrinter
     @buf << str
   end
   
-  
-  def render_html(obj)
-    render(obj).gsub(' ', '&nbsp;').gsub("\n", "<br>")
-  end
   
   # Recursive rendering method.  Primitive values, like nil, true, false, 
   # numbers, symbols, and strings are converted to JSON and appended to the

@@ -7,32 +7,37 @@ Neo4jr-Social was built in JRuby but is language agnostic and is designed to run
 = Getting Started
 
 === Prerequisites
+
 * Java
 * JRuby: http://jruby.org
 
-=== Installing
-Install Ruby Gem: json_pure
-  jgem install json_pure
-Install Ruby Gem: sinatra
-  jgem install sinatra
-Install Ruby Gem: neo4jr-simple
-  jgem install neo4jr-simple
-Install Ruby Gem: neo4jr-social
-  jgem install neo4jr-social
+=== Running Neo4jr-Social
 
-=== Starting Neo4jr-Social
-
-After installing the above gems, an executable 'start-neo4jr-social' should be in your path. This will start the service and the database and listen for HTTP requests on localhost at port 8988:
+After installing the above gems, an executable 'start-neo4jr-social' should be in your $PATH. This will start the service and the database and listen for HTTP requests on localhost at port 8988 by default:
 
   start-neo4jr-social -p8988
 
 You can also start the service and specify the directory of where the neo4j database is stored or where to create a new database. If you omit this setting a database will be created in your tmp directory and destroyed when you shutdown the server.
 
   start-neo4jr-social -p8988 -dsome_relative_or_absolute_directory
-  
+
 Run start-neo4jr-social --help to see all options
 
+=== API
+
+  The service is documented
+
+=== Troubleshooting
+  
+  /usr/bin/env: jruby: No such file or directory
+  
+You need to either install jruby or if you used a utility like rvm then your jruby executable may actually be called jruby-1.4, if this is the case create an alias somewhere in your PATH like:
+  
+  ln -s jruby-1.4.0 jruby
+  
 === API Overview
+
+See examples
 All results returned will be in JSON
   
 ==== GET /info
@@ -79,13 +84,7 @@ This returns the shortest path of two nodes that are connected to each other
 This returns node suggestions for the given :node_id. This is similar to facebook friend suggestions where your friend's friends that your not friends with are suggested to you. 
   * Required: type - the type of relationships between nodes to follow
   * Optional: level - the degree of separation that you want recommendations for, the default is 1 degree away which is similar to facebook's behavior
-
-
-== Troubleshooting
   
-  /usr/bin/env: jruby: No such file or directory
-  
-  You need to either install jruby or if you used a utility like rvm then your jruby executable may actually be called jruby-1.4, if this is the case create an alias somewhere in your PATH
 == Contributors
 
 ====Matthew Deiters

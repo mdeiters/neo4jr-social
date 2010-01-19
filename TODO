@@ -1,9 +1,10 @@
-* Figure out a better way to shebang for start-neo4jr-social
+#!/usr/bin/env ruby
+Make sure you set your JAVA_HOME and do a sym link from jruby to ruby if you don't have it
+
 * Validate requests, check parameters, etc
 * Figure out how we should handle the Neo4j node's classname
 * Query Type: Amazon Recommendations
 * Query Type: Most Popular
 * Query Type: Primitive dynamic querying on all nodes
 * Enable solr type parameters with lt gt eq etc
-* Explore vendor-ize all ruby libs into WEB-INF
-
+* Delete should delete a node and all relationships

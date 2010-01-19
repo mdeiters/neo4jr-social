@@ -1,27 +1,28 @@
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__)))
 
-def find_and_load_neo4jr_simple
-  java_import java.lang.System
-  neo4jr_simple_root = System.getProperty('neo4jr.simple') || ENV['neo4jr_simple']
+def find_and_require_neo4jr_simple
+  neo4jr_simple_root = java.lang.System.getProperty('neo4jr.simple') || ENV['neo4jr_simple']
   if neo4jr_simple_root
     $LOAD_PATH.unshift(File.join(neo4jr_simple_root, 'lib'))
   else
     gem 'neo4jr-simple'
   end  
+  require 'neo4jr-simple'
 end
 
 include Java
-find_and_load_neo4jr_simple
+
+require 'rubygems'
 
 gem 'sinatra'
-gem 'json_pure'  
+gem 'json_pure'
 
 require 'sinatra'
 require 'json'
-require 'neo4jr-simple'
+
+find_and_require_neo4jr_simple
 
 require 'neo4jr-social/simple_cost_evaluator'
 require 'neo4jr-social/self_documentor'
 require 'neo4jr-social/json_printer'
-# require 'neo4jr-social/respond_to'
 require 'neo4jr-social/service'

@@ -89,13 +89,6 @@ describe "JsonPrinter" do
       it "should render" do
         JSON.parse(JsonPrinter.render(@d)).should == @d
       end
-
-      it "should be faster than the pure Ruby gem" do
-        pure_time = Benchmark.realtime { 500.times { JSON.generate(@d) } }
-        our_time  = Benchmark.realtime { 500.times { JsonPrinter.render(@d) } }
-        
-        our_time.should < pure_time
-      end
     end
   end
 end
