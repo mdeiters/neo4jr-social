@@ -17,7 +17,6 @@ module Neo4jr
     end
 
     def overlap_cost r1, r2
-#      raise "Cannot add cost for non adjacent paths" unless r1.getEndNode == r2.getEndNode
       days = darr('end_date', r1, r2, true) - darr('start_date', r1, r2, false)
       days > 0 ? 1.0/days : @disjunct_cost
     end
