@@ -3,6 +3,10 @@ two ways to use
  standalone, jetty in dev, get the war for prod (how to make your own war)
  use in rack applicatoin (has to be running under jruby)
  how to build, runlocally
+
+How to run arbitray code? ~/.neo4jr-social or 
+('neo4jr.extensions') || ENV['neo4jr_extensions']
+ 
  
 = neo4jr-social
 
