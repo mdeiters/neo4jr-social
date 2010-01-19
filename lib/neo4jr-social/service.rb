@@ -143,9 +143,21 @@ module Neo4jr
     end
 
     private
-    def dijkstra(neo)
+    def dijkstra_default(neo)
       Dijkstra.new(
         0.0,
+        neo.getNodeById(param_node_id),
+        neo.getNodeById(param_to_node_id),
+        Neo4jr::SimpleEvaluator.new,
+        DoubleAdder.new,
+        DoubleComparator.new,
+        direction,
+        relationship_types)
+    end
+
+    def dijkstra(neo)
+      Dijkstra.new(
+        Neo4jr::DelayedCost.new,
         neo.getNodeById(param_node_id),
         neo.getNodeById(param_to_node_id),
         Neo4jr::DelayedCostEvaluator.new,
