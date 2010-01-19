@@ -10,7 +10,7 @@ module Neo4jr
       r1 = o1.relationship
       r2 = o2.relationship
       if r1 and r2
-        DelayedCost nil, o1.cost + o2.cost + overlap_cost(r1, r2)
+        DelayedCost.new(nil, o1.cost + o2.cost + overlap_cost(r1, r2))
       else
         DelayedCost.new(r1 || r2, o1.cost + o2.cost)
       end
