@@ -163,9 +163,9 @@ module Neo4jr
         0.0,
         neo.getNodeById(params.delete('node_id')),
         neo.getNodeById(params.delete('to')),
-        Neo4jr::SimpleEvaluator.new,
-        DoubleAdder.new,
-        DoubleComparator.new,
+        Neo4jr::DelayedCostEvaluator.new,
+        Neo4jr::DelayedCostAccumulator.new,
+        Neo4jr::DelayedCostComparator.new,
         direction,
         relationship_types)
     end

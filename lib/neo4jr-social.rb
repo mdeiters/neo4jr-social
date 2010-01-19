@@ -23,6 +23,10 @@ require 'json'
 find_and_require_neo4jr_simple
 
 require 'neo4jr-social/simple_cost_evaluator'
+require 'neo4jr-social/delayed_cost'
+require 'neo4jr-social/delayed_cost_evaluator'
+require 'neo4jr-social/delayed_cost_accumulator'
+require 'neo4jr-social/delayed_cost_comparator'
 require 'neo4jr-social/self_documentor'
 require 'neo4jr-social/json_printer'
 require 'neo4jr-social/service'
