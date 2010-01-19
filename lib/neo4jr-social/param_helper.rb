@@ -22,7 +22,7 @@ module Neo4jr
     end
 
     def depth
-      (params.delete('depth') || n).to_i
+      (params.delete('depth') || 2).to_i
     end
     
     def param_level 

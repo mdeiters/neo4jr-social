@@ -120,7 +120,7 @@ module Neo4jr
     required_param :type, "the type of relationships between nodes to follow"
     get '/nodes/:node_id/shortest_path' do
       path = Neo4jr::DB.execute do |neo|
-        (p=dijkstra(neo).getPath) and p.map{|n| n.to_hash }
+        (p=dijkstra_default(neo).getPath) and p.map{|n| n.to_hash }
       end
       path.to_json
     end
