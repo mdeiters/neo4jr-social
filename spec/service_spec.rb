@@ -2,19 +2,6 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe Neo4jr::Service do
 
-  describe 'mime type handling' do
-    it 'returns pure json by default' do
-      get '/'
-      last_response.body.should_not include(html_space = '&nbsp;')
-    end
-    
-    it 'returns htmlized json if a browser request' do
-      # puts request.inspect
-      get '/', {}, {'HTTP_ACCEPT' => 'text/html'}
-      last_response.body.should include(html_space = '&nbsp;')
-    end
-  end
-  
   it "should be able to create a node" do
     post '/nodes', 'some_property=a_value&type=person'
     node = response_to_ruby

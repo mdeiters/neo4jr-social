@@ -5,11 +5,11 @@ module Neo4jr
     end
         
     def required_param(*args)
-      'NOT IMPLEMENTED'
+      'TODO: NOT IMPLEMENTED'
     end
     
     def optional_param(*args)
-      'NOT IMPLEMENTED'
+      'TODO: NOT IMPLEMENTED'
     end
     
     def self.capture(text)

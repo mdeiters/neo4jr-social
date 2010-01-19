@@ -1,5 +1,9 @@
 pretty html json or real json
-
+two ways to use
+ standalone, jetty in dev, get the war for prod (how to make your own war)
+ use in rack applicatoin (has to be running under jruby)
+ how to build, runlocally
+ 
 = neo4jr-social
 
 Neo4jr-Social is a self contained HTTP REST + JSON interface to the graph database Neo4j. Neo4jr-Social supports simple dynamic node creation, building relationships between nodes and also includes a few common social networking queries out of the box (i.e. linkedin degrees of seperation and facebook friend suggestion) with more to come. Think of Neo4jr-Social is to Neo4j like Solr is to Lucene.
