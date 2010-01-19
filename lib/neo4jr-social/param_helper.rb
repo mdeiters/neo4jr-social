@@ -13,15 +13,7 @@ module Neo4jr
       params.delete('to')
     end
 
-    def max_nodes
-      (params.delete('max_nodes') || 300).to_i
-    end
-
-    def max_rel
-      (params.delete('max_rel') || 20000).to_i
-    end
-
-    def depth
+    def param_depth
       (params.delete('depth') || 2).to_i
     end
     
@@ -29,7 +21,7 @@ module Neo4jr
       @param_level ||= (params.delete('level') || 1).to_i
     end
 
-    def direction
+    def param_direction
       Neo4jr::Direction.from_string(params.delete('direction') || 'both')
     end
 

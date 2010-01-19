@@ -39,7 +39,6 @@ require 'json'
 
 find_and_require_neo4jr_simple
 
-require 'neo4jr-social/simple_cost_evaluator'
 require 'neo4jr-social/self_documentor'
 require 'neo4jr-social/param_helper'
 require 'neo4jr-social/format_handler'

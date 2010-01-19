@@ -1,5 +1,5 @@
-# Please see the readme for overview documentation.
-#
+# Please see http://github.com/techcrunch/json_printer
+# 
 class JsonPrinter
   attr_reader :buf, :indent
   
