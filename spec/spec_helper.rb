@@ -6,6 +6,9 @@ require 'spec'
 require 'spec/autorun'
 require 'rack/test'
 
+# Neo4jr::Configuration.database_path = File.join(File.expand_path(File.dirname(__FILE__)), 'test-imdb-database')
+# puts Neo4jr::Configuration.database_path
+
 Spec::Runner.configure do |config|
   include Rack::Test::Methods
 

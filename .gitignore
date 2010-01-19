@@ -17,7 +17,7 @@ tmtags
 coverage
 rdoc
 pkg
+tmp
 
 ## PROJECT::SPECIFIC
 .idea
-tmp

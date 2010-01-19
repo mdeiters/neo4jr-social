@@ -30,4 +30,6 @@ make_mutual_friends(phill, mary)
 make_mutual_friends(phill, luke)
 
 puts "Johnathan should become friends with #{suggestions_for(johnathan).map{|n| n['name']}.join(', ')}"
-#=> Johnathan should become friends with Mary, Phill
+
+# RESULT
+# Johnathan should become friends with Mary, Phill

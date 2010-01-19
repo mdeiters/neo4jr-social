@@ -1,10 +1,8 @@
-#!/usr/bin/env ruby
-Make sure you set your JAVA_HOME and do a sym link from jruby to ruby if you don't have it
-
+* Support HTML or JSON
 * Validate requests, check parameters, etc
-* Figure out how we should handle the Neo4j node's classname
+* Retrieve Node by identifier other then node id
+* Figure out how to handle the Neo4j nodes classname
 * Query Type: Amazon Recommendations
 * Query Type: Most Popular
 * Query Type: Primitive dynamic querying on all nodes
-* Enable solr type parameters with lt gt eq etc
-* Delete should delete a node and all relationships
+* More querying potential: Enable solr type parameters with lt gt eq etc

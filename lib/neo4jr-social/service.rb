@@ -5,19 +5,21 @@ module Neo4jr
     # register ParamHelper
     
     mime :json, 'application/json'
-    set :default_content, :html
     set :default_charset, 'utf-8'
     set :assume_xhr_is_js, true
           
     before do
-      request.path_info.sub! %r{\.([^\./]+)$}, ''
-      format request.xhr? && options.assume_xhr_is_js? ? :js : $1 || options.default_content
-      set :default_content, :html
+      if request.env['HTTP_ACCEPT'] && request.env['HTTP_ACCEPT'].include?('text/html')
+        format :html
+      else
+        format :json
+      end
       charset options.default_charset
     end
 
-    get '/|index' do
-      puts format.to_s
+    describe "Lists all possible request types with descriptions"
+    get '/' do
+      # format(default_for_this_request = :html)
       render_for_format(SelfDocumentor.output)
     end
 
@@ -62,7 +64,7 @@ module Neo4jr
     delete '/nodes/:node_id' do
       Neo4jr::DB.execute do |neo|
         node = neo.getNodeById(params['node_id'])
-        node.getRelationships.each {|r| r.delete}
+        node.get_relationships.each { |r| r.delete }
         node.delete
       end
     end
@@ -153,9 +155,13 @@ module Neo4jr
 
     private
     def render_for_format(data)
-      return JsonPrinter.render(data) if format == :json
-      return JsonPrinter.render_html(data) if format == :html
-      fail "#{format} is not a supported MIME type"
+      # return JsonPrinter.render(data)
+      case format
+        when :json : return JsonPrinter.render(data)
+        when :html : return JsonPrinter.render_html(data)
+        else
+           fail("#{format} is not a supported MIME type")
+      end
     end
     
     def dijkstra(neo)

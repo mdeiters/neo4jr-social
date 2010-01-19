@@ -34,5 +34,6 @@ degrees_of_seperation(johnathan, mary).each do |path|
   puts path.map{|node| node['name'] || node['type']}.join(' => ') 
 end
 
+# RESULT
 # Johnathan => friends => Mark => friends => Phill => friends => Mary
 # Johnathan => friends => Mark => friends => Mary
