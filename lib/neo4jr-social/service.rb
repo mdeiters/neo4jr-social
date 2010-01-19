@@ -99,21 +99,23 @@ module Neo4jr
       paths.to_json
     end
 
-    get '/nodes/:node_id/dijkstra_paths' do
-      path = Neo4jr::DB.execute do |neo|
-        dijkstra = dijkstra neo
-        dijkstra.limitMaxNodesToTraverse(max_nodes)
-        dijkstra.limitMaxRelationShipsToTraverse(max_rel)
-        to_hash dijkstra.getPaths
+    ['', '_date'].each do |prefix|
+      get "/nodes/:node_id/dijkstra#{prefix}_paths" do
+        path = Neo4jr::DB.execute do |neo|
+          dijkstra = send "dijkstra#{prefix}", neo
+          dijkstra.limitMaxNodesToTraverse(max_nodes)
+          dijkstra.limitMaxRelationShipsToTraverse(max_rel)
+          to_hash dijkstra.getPaths
+        end
+        path.to_json
       end
-      path.to_json
-    end
 
-    get '/nodes/:node_id/shortest_path' do
-      path = Neo4jr::DB.execute do |neo|
-        (p=dijkstra(neo).getPath) and p.map{|n| n.to_hash }
+      get "/nodes/:node_id/shortest#{prefix}_path" do
+        path = Neo4jr::DB.execute do |neo|
+          (p=send("dijkstra#{prefix}", neo).getPath) and p.map{|n| n.to_hash }
+        end
+        path.to_json
       end
-      path.to_json
     end
 
     get '/nodes/:node_id/recommendations' do
@@ -132,28 +134,28 @@ module Neo4jr
     end
 
     private
-    def dijkstra_default(neo)
-      Dijkstra.new(
-        0.0,
-        neo.getNodeById(params.delete('node_id')),
-        neo.getNodeById(params.delete('to')),
-        Neo4jr::SimpleEvaluator.new,
-        DoubleAdder.new,
-        DoubleComparator.new,
-        direction,
-        relationship_types)
-    end
-
     def dijkstra(neo)
       Dijkstra.new(
-        Neo4jr::DelayedCost.new,
-        neo.getNodeById(params.delete('node_id')),
-        neo.getNodeById(params.delete('to')),
-        Neo4jr::DelayedCostEvaluator.new,
-        Neo4jr::DelayedCostAccumulator.new,
-        Neo4jr::DelayedCostComparator.new,
-        direction,
-        relationship_types)
+              0.0,
+              neo.getNodeById(params.delete('node_id')),
+              neo.getNodeById(params.delete('to')),
+              Neo4jr::SimpleEvaluator.new,
+              DoubleAdder.new,
+              DoubleComparator.new,
+              direction,
+              relationship_types)
+    end
+
+    def dijkstra_date(neo)
+      Dijkstra.new(
+              Neo4jr::DelayedCost.new,
+              neo.getNodeById(params.delete('node_id')),
+              neo.getNodeById(params.delete('to')),
+              Neo4jr::DelayedCostEvaluator.new,
+              Neo4jr::DelayedCostAccumulator.new,
+              Neo4jr::DelayedCostComparator.new,
+              direction,
+              relationship_types)
     end
 
     def max_nodes

@@ -17,14 +17,21 @@ module Neo4jr
     end
 
     def overlap_cost r1, r2
-      raise "Cannot add cost for non adjacent paths" unless r1.getEndNode == r2.getEndNode
-      days = darr(:end_date, r1, r2).min - darr(:start_date, r1, r2).max
+#      raise "Cannot add cost for non adjacent paths" unless r1.getEndNode == r2.getEndNode
+      days = darr('end_date', r1, r2, true) - darr('start_date', r1, r2, false)
       days > 0 ? 1.0/days : @disjunct_cost
     end
 
     private
-    def darr property, *rels
-      rels.map {|r| (p=r.getProperty(property.to_s)) ? Date.parse(p, true) : Date.today}
+    def darr property, r1, r2, min
+      d1 = Date.parse(r1.getProperty(property), true)
+      d2 = Date.parse(r2.getProperty(property), true)
+
+      if d1 < d2
+          min ? d1 : d2
+      else
+          min ? d2 : d1
+      end
     end
   end
 end
