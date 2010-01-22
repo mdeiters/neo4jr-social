@@ -1,5 +1,6 @@
 module Neo4jr
   class Service < Sinatra::Base
+    include Neo4jr::PathRater
     helpers ParamHelper
     register SelfDocumentor, FormatHandler
     
@@ -114,7 +115,7 @@ module Neo4jr
           DoubleComparator.new,
           direction,
           relationship_types)
-        (p=dijkstra.getPath) and p.map{|n| n.to_hash }
+        (p=dijkstra.getPath) and {:path => p.map{|n| n.to_hash }, :cost => dijkstra.getCost}
       end
       path.to_json
     end
@@ -137,6 +138,15 @@ module Neo4jr
     end
 
     private
+
+    def to_rated_hash path, start_cost=0.0, cost_evaluator=Neo4jr::SimpleEvaluator.new, cost_accumulator=DoubleAdder.new
+        {:path => path.map{|n| n.to_hash}, :cost => get_cost(path, start_cost, cost_evaluator, cost_accumulator)}
+    end
+
+    def to_rated_hashes paths, start_cost=0.0, cost_evaluator=Neo4jr::SimpleEvaluator.new, cost_accumulator=DoubleAdder.new
+        paths and paths.map{|p| to_rated_hash p, start_cost, cost_evaluator, cost_accumulator}
+    end
+
     def to_hash paths
       paths and paths.map{|p| p.map{|n| n.to_hash }}
     end
