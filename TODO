@@ -1,5 +1,4 @@
 * Validate requests, check parameters, etc
-* Retrieve Node by identifier other then node id
 * Figure out how to handle the Neo4j nodes classname
 * More querying potential: Enable solr type parameters with lt gt eq etc or enable gremlin
 Examples

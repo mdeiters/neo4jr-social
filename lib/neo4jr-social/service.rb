@@ -22,7 +22,7 @@ module Neo4jr
       nodes.to_json
     end
 
-    describe "Creates a new node in the neo4j database. Any parameters based in the body of the POST will be treated as properties for the node and will be stored in the database."
+    describe "Creates a new node in the neo4j database. Any parameters based in the body of the POST will be treated as properties for the node and will be stored in the database. The response will be the neo4j node id. Additionally you can add the identifier property which if exsists can be used as the node_id for other requests."
     post '/nodes' do
       node = Neo4jr::DB.execute do |neo|
         node = neo.create_node(params)
@@ -30,17 +30,17 @@ module Neo4jr
       node.to_hash.to_json
     end
 
-    describe "Returns the properties for the specified node, where :node_id is the numeric id for the node."
+    describe "Returns the properties for the specified node, where :node_id is the value of the identifier propery of the node or if no identifier is specified you can use the numeric neo4j id."
     get '/nodes/:node_id' do
       node = Neo4jr::DB.execute do |neo|
-        neo.getNodeById(param_node_id).to_hash.to_json
+        neo.find_node(param_node_id).to_hash.to_json
       end
     end
 
-    describe "Updates the properties of the specified node, where :node_id is the numeric id for the node. Any parameters pased in the body of the PUT will be treated as properties for the node. If you add a new parameters (i.e. age=4) which previously were not on the node, neo4jr-social will still add that property to the node."
+    describe "Updates the properties of the specified node, where :node_id is the value of the identifier propery of the node or if no identifier is specified you can use the numeric neo4j id. Any parameters pased in the body of the PUT will be treated as properties for the node. If you add a new parameters (i.e. age=4) which previously were not on the node, neo4jr-social will still add that property to the node."
     put '/nodes/:node_id' do
       node = Neo4jr::DB.execute do |neo|
-        node = neo.getNodeById(param_node_id)
+        node = neo.find_node(param_node_id)
         node.update_properties(params)
       end
       node.to_hash.to_json
@@ -49,19 +49,19 @@ module Neo4jr
     describe "Deletes the specified node, where :node_id is the numeric id for the node."
     delete '/nodes/:node_id' do
       Neo4jr::DB.execute do |neo|
-        node = neo.getNodeById(param_node_id)
+        node = neo.find_node(param_node_id)
         node.get_relationships.each { |r| r.delete }
         node.delete
       end
     end
 
-    describe "Creates a relations for the specified node, where :node_id is the numeric id for the node. This is how you designate how two nodes are related to each other."
+    describe "Creates a relations for the specified node, where :node_id is the value of the identifier propery of the node or if no identifier is specified you can use the numeric neo4j id. This is how you designate how two nodes are related to each other."
     required_param :to,   'This is the node id of the node you want to make a relationship to. This is a one-way relationship. If you want both nodes to be.'
     required_param :type, "this is the type of the relationship, i.e. 'friends'. This can be any string that is sensible in your domain."
     optional_param "Any other parameters you supply in the body of the POST will be added as properties to the relationship. For example if you were making 'friend' relationships and wanted to add a date since the friendship started you could pass a 'since' parameter in the POST."
     get '/nodes/:node_id/relationships' do
       relationships = Neo4jr::DB.execute do |neo|
-        node = neo.getNodeById(param_node_id)
+        node = neo.find_node(param_node_id)
         if param_relationship_type
           relationship_type = RelationshipType.instance(param_relationship_type)
           node.getRelationships(param_relationship_type.to_a).hashify_objects
@@ -72,12 +72,12 @@ module Neo4jr
       relationships.to_json
     end
 
-    describe "Returns relationships to other nodes for the specified node, where :node_id is the numeric id for the node."
+    describe "Returns relationships to other nodes for the specified node, where :node_id is the value of the identifier propery of the node or if no identifier is specified you can use the numeric neo4j id."
     optional_param :type, "Specify a type if only certain relationships are of interest"
     post '/nodes/:node_id/relationships' do
       relationships = Neo4jr::DB.execute do |neo|
-        node = neo.getNodeById(param_node_id)
-        to_node = neo.getNodeById(param_to_node_id)
+        node = neo.find_node(param_node_id)
+        to_node = neo.find_node(param_to_node_id)
         relationship_type = RelationshipType.instance(param_relationship_type)
         relationship = node.create_relationship_to to_node, relationship_type
         relationship.update_properties(params)
@@ -93,8 +93,8 @@ module Neo4jr
     optional_param :direction, "hat direction of relationships to follow, the default is 'both'"
     get '/nodes/:node_id/paths' do
       paths = Neo4jr::DB.execute do |neo|
-        start_node = neo.getNodeById(param_node_id)
-        end_node = neo.getNodeById(param_to_node_id)
+        start_node = neo.find_node(param_node_id)
+        end_node = neo.find_node(param_to_node_id)
         shortest_path = AllSimplePaths.new(start_node, end_node, param_depth, param_direction, relationship_types)
         to_hash shortest_path.getPaths
       end
@@ -108,8 +108,8 @@ module Neo4jr
       path = Neo4jr::DB.execute do |neo|
         dijkstra = Dijkstra.new(
           0.0,
-          neo.getNodeById(param_node_id),
-          neo.getNodeById(param_to_node_id),
+          neo.find_node(param_node_id),
+          neo.find_node(param_to_node_id),
           Neo4jr::SimpleEvaluator.new,
           DoubleAdder.new,
           DoubleComparator.new,
@@ -126,7 +126,7 @@ module Neo4jr
     get '/nodes/:node_id/recommendations' do
       suggestions = Neo4jr::DB.execute do |neo|
         relationship = Neo4jr::RelationshipType.incoming(param_relationship_type)
-        start_node = neo.getNodeById(param_node_id)
+        start_node = neo.find_node(param_node_id)
         order = Order::BREADTH_FIRST
         return_when = Return.when do |current_position|
           current_position.depth > param_level
