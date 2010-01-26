@@ -98,7 +98,6 @@ describe Neo4jr::Service do
       
       get "/nodes/#{hoffman['node_id']}/shortest_path?type=friends&to=#{cruise['node_id']}"
       path_to_cruise = response_to_ruby['path']
-      puts path_to_cruise.inspect
       path_to_cruise[0]['name'].should == 'Philip Seymour Hoffman'
       path_to_cruise[1]['type'].should == 'friends'
       path_to_cruise[2]['name'].should == 'Tina Fey'
