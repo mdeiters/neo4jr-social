@@ -51,10 +51,12 @@ Rake::RDocTask.new do |rdoc|
 end
 
 task :warify do
+  version = File.exist?('VERSION') ? File.read('VERSION') : ""
+
   commands = ['rm -rf tmp']
   commands << 'warble'
   commands << 'rm jetty-runtime/webapps/neo4jr-social.war'
-  commands << 'mv neo4jr-social.war jetty-runtime/webapps/neo4jr-social.war'
+  commands << "mv neo4jr-social-#{version}.war jetty-runtime/webapps/neo4jr-social.war"
   commands.each do |command|
     STDERR.puts("Executing: #{command}")
     `#{command}`

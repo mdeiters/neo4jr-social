@@ -55,16 +55,14 @@ module Neo4jr
       end
     end
 
-    describe "Creates a relations for the specified node, where :node_id is the value of the identifier propery of the node or if no identifier is specified you can use the numeric neo4j id. This is how you designate how two nodes are related to each other."
-    required_param :to,   'This is the node id of the node you want to make a relationship to. This is a one-way relationship. If you want both nodes to be.'
-    required_param :type, "this is the type of the relationship, i.e. 'friends'. This can be any string that is sensible in your domain."
-    optional_param "Any other parameters you supply in the body of the POST will be added as properties to the relationship. For example if you were making 'friend' relationships and wanted to add a date since the friendship started you could pass a 'since' parameter in the POST."
+    describe "Returns relationships to other nodes for the specified node, where :node_id is the value of the identifier propery of the node or if no identifier is specified you can use the numeric neo4j id."
+    optional_param :type, "Specify a type if only certain relationships are of interest"
     get '/nodes/:node_id/relationships' do
       relationships = Neo4jr::DB.execute do |neo|
         node = neo.find_node(param_node_id)
         if param_relationship_type
           relationship_type = RelationshipType.instance(param_relationship_type)
-          node.getRelationships(param_relationship_type.to_a).hashify_objects
+          node.getRelationships(relationship_type.to_a).hashify_objects
         else
           node.getRelationships.hashify_objects
         end
@@ -72,8 +70,10 @@ module Neo4jr
       relationships.to_json
     end
 
-    describe "Returns relationships to other nodes for the specified node, where :node_id is the value of the identifier propery of the node or if no identifier is specified you can use the numeric neo4j id."
-    optional_param :type, "Specify a type if only certain relationships are of interest"
+    describe "Creates a relations for the specified node, where :node_id is the value of the identifier propery of the node or if no identifier is specified you can use the numeric neo4j id. This is how you designate how two nodes are related to each other."
+    required_param :to,   'This is the node id of the node you want to make a relationship to. This is a one-way relationship. If you want both nodes to be.'
+    required_param :type, "this is the type of the relationship, i.e. 'friends'. This can be any string that is sensible in your domain."
+    optional_param "Any other parameters you supply in the body of the POST will be added as properties to the relationship. For example if you were making 'friend' relationships and wanted to add a date since the friendship started you could pass a 'since' parameter in the POST."
     post '/nodes/:node_id/relationships' do
       relationships = Neo4jr::DB.execute do |neo|
         node = neo.find_node(param_node_id)
