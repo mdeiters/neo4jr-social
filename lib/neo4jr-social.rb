@@ -32,7 +32,7 @@ include Java
 require 'rubygems'
 
 gem 'sinatra'
-gem 'json_pure'
+gem 'json-jruby'
 
 require 'sinatra'
 require 'json'

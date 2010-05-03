@@ -15,9 +15,10 @@ begin
     gem.authors = ["Matthew Deiters"]
     gem.add_development_dependency "rspec", ">= 1.2.9"
     gem.add_development_dependency "rest-client"
+    gem.add_development_dependency "rack-test"
     gem.add_dependency 'neo4jr-simple', "0.2.1" unless ENV['neo4jr_simple']
-    gem.add_dependency 'sinatra'
-    gem.add_dependency 'json_pure'
+    gem.add_dependency 'sinatra', ">= 1.0"
+    gem.add_dependency 'json-jruby', ">= 1.4.1"
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
