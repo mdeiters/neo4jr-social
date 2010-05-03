@@ -90,7 +90,7 @@ module Neo4jr
     required_param :to, "the id of the node that your trying to find a path to from the starting node, :node_id"
     required_param :type, "the type of relationships between nodes to follow"
     optional_param :depth, "the maximum degrees of separation to find, the default is 2 degrees. Note: There may be performance impacts if this number is to high."
-    optional_param :direction, "hat direction of relationships to follow, the default is 'both'"
+    optional_param :direction, "the direction of relationships to follow, the default is 'both'"
     get '/nodes/:node_id/paths' do
       paths = Neo4jr::DB.execute do |neo|
         start_node = neo.find_node(param_node_id)
@@ -104,6 +104,7 @@ module Neo4jr
     describe "This returns the first of the shortest path of two nodes that are connected to each other"
     required_param :to, "the id of the node that your trying to find a path to from the starting node, :node_id" 
     required_param :type, "the type of relationships between nodes to follow"
+    optional_param :direction, "the direction of relationships to follow, the default is 'both'"
     get '/nodes/:node_id/shortest_path' do
       path = Neo4jr::DB.execute do |neo|
         dijkstra = Dijkstra.new(
@@ -113,7 +114,7 @@ module Neo4jr
           Neo4jr::SimpleEvaluator.new,
           DoubleAdder.new,
           DoubleComparator.new,
-          direction,
+          param_direction,
           relationship_types)
         (p=dijkstra.getPath) and {:path => p.map{|n| n.to_hash }, :cost => dijkstra.getCost}
       end

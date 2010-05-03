@@ -103,7 +103,21 @@ describe Neo4jr::Service do
       path_to_cruise[2]['name'].should == 'Tina Fey'
       path_to_cruise[3]['type'].should == 'friends'
       path_to_cruise[4]['name'].should == 'Tom Cruise'
-    end    
+    end
+    
+    it "uses the direction of paths to follow when given for shortest path" do
+      # only fey to cruise is a friend
+      post "/nodes/#{fey['node_id']}/relationships", { :to => cruise['node_id'], :type => 'friends' }
+      
+      get "/nodes/#{cruise['node_id']}/shortest_path?type=friends&to=#{fey['node_id']}&direction=incoming"
+      path_to_fey = response_to_ruby['path']
+      path_to_fey[0]['name'].should == 'Tom Cruise'
+      path_to_fey[1]['type'].should == 'friends'
+      path_to_fey[2]['name'].should == 'Tina Fey'
+      
+      get "/nodes/#{cruise['node_id']}/shortest_path?type=friends&to=#{fey['node_id']}&direction=outgoing"
+      last_response.body.should == 'null'
+    end
   end
   
   describe 'getting paths between nodes' do
