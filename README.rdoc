@@ -12,6 +12,15 @@ Neo4jr-Social was built in JRuby but is language agnostic and is designed to run
 * JRuby: http://jruby.org
 * sudo aptitude install jruby1.2 rake rubygems
 
+=== Building
+
+* gem install rspec
+* rake --tasks
+* jruby -S gem install rest-client
+* jruby -S gem install rack-test
+* jruby -S gem install json-jruby
+
+
 === Installing
 Install Ruby Gem: neo4jr-social
 
