@@ -38,10 +38,6 @@ You can also start the service and specify the directory of where the neo4j data
 
 Run start-neo4jr-social --help to see all options
 
-=== API
-
-  The service is documented at http://wiki.github.com/mdeiters/neo4jr-social/
-
 == Contributors
 
 ====Matthew Deiters
