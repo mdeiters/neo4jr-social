@@ -32,12 +32,16 @@ Once done, use rvm to install latest jruby and required gems
 
 Building the code and documentation
 
-* rake -T
+* rake -T # optional, lists possible tasks
 * rake gemspec
 * rake rcov --debug
 * rake rdoc
 * rake warify
 * rake build
+
+Or short version (without documentation)
+
+* rake gemspec warify build
 
 === Installing
 Install Ruby Gem: neo4jr-social
