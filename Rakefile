@@ -8,7 +8,6 @@ begin
   Jeweler::Tasks.new do |gem|
     gem.name = "neo4jr-social"
     gem.summary = %Q{A self-containted and lightweight REST interface to Neo4j using JRuby.}
-    gem.description = %Q{A self-containted and lightweight REST interface to Neo4j using JRuby.}
     gem.email = "matthew_deiters@mckinsey.com"
     gem.homepage = "http://github.com/mdeiters/neo4jr-social"
     gem.authors = ["Matthew Deiters"]
