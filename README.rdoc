@@ -14,17 +14,35 @@ Neo4jr-Social was built in JRuby but is language agnostic and is designed to run
 
 === Building
 
-* gem install rspec
-* rake --tasks
-* jruby -S gem install rest-client
-* jruby -S gem install rack-test
-* jruby -S gem install json-jruby
+* install rvm (see http://rvm.beginrescueend.com/rvm/install/)
 
+Once done, use rvm to install latest jruby and required gems
+
+* rvm install jruby
+* rvm use --default jruby
+* gem install jruby-openssl
+* gem install rake
+* gem install rspec
+* gem install test-client
+* gem install rack-test
+* gem install json-jruby -v 1.4.1
+* gem install jeweler
+* gem install warbler
+* gem install rcov
+
+Building the code and documentation
+
+* rake -T
+* rake gemspec
+* rake rcov --debug
+* rake rdoc
+* rake warify
+* rake build
 
 === Installing
 Install Ruby Gem: neo4jr-social
 
-  gem install neo4jr-simple
+* gem install neo4jr-social
 
 == Running Neo4jr-Social
 
