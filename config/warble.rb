@@ -3,9 +3,9 @@ Warbler::Config.new do |config|
   config.dirs = %w(lib)
   config.includes = FileList["config.ru"]
 
-  config.gems['sinatra']       = '1.0'
-  config.gems['json-jruby']     = '1.4.1'
-  config.gems['neo4jr-simple'] = '0.2.1'
+  config.gems << Gem::Dependency.new("sinatra", ">= 1.0")
+  config.gems << Gem::Dependency.new("json-jruby", ">= 1.4.1")
+  config.gems << Gem::Dependency.new("neo4jr-simple", ">= 0.2.1")
   
   config.gem_dependencies = true
   config.webxml.booter = :rack
