@@ -95,8 +95,8 @@ module Neo4jr
       paths = Neo4jr::DB.execute do |neo|
         start_node = neo.find_node(param_node_id)
         end_node = neo.find_node(param_to_node_id)
-        shortest_path = AllSimplePaths.new(start_node, end_node, param_depth, param_direction, relationship_types)
-        to_hash shortest_path.getPaths
+        shortest_path = AllSimplePaths.new(start_node, end_node, relationship_types.first, param_direction)
+        to_hash shortest_path.getPaths(param_depth)
       end
       paths.to_json
     end

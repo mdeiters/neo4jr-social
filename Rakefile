@@ -54,7 +54,7 @@ task :warify do
   commands = ['rm -rf tmp']
   commands << 'warble'
   commands << 'rm -f jetty-runtime/webapps/neo4jr-social.war'
-  commands << "mv neo4jr-social.war jetty-runtime/webapps/neo4jr-social.war"
+  commands << 'mkdir -p jetty-runtime/webapps/; mv neo4jr-social.war $_'
   commands.each do |command|
     STDERR.puts("Executing: #{command}")
     `#{command}`
