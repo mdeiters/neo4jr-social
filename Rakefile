@@ -8,8 +8,6 @@ begin
   Jeweler::Tasks.new do |gem|
     gem.name = "neo4jr-social"
     gem.summary = %Q{A self-containted and lightweight REST interface to Neo4j using JRuby.}
-    gem.description = %Q{A self-containted and lightweight REST interface to Neo4j using JRuby.}
-    gem.description = %Q{A self-containted lightweight REST interface to Neo4j using JRuby }
     gem.email = "matthew_deiters@mckinsey.com"
     gem.homepage = "http://github.com/mdeiters/neo4jr-social"
     gem.authors = ["Matthew Deiters"]
@@ -51,10 +49,13 @@ Rake::RDocTask.new do |rdoc|
 end
 
 task :warify do
+  version = File.exist?('VERSION') ? File.read('VERSION') : ""
+
   commands = ['rm -rf tmp']
   commands << 'warble'
-  commands << 'rm jetty-runtime/webapps/neo4jr-social.war'
-  commands << 'mv neo4jr-social.war jetty-runtime/webapps/neo4jr-social.war'
+  commands << 'rm -f jetty-runtime/webapps/neo4jr-social.war'
+#  commands << "mv neo4jr-social-#{version}.war jetty-runtime/webapps/neo4jr-social.war"
+  commands << "mv neo4jr-social.war jetty-runtime/webapps/neo4jr-social.war"
   commands.each do |command|
     STDERR.puts("Executing: #{command}")
     `#{command}`

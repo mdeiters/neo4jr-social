@@ -27,7 +27,7 @@ module Neo4jr
     
     def self.route_added(verb, path, proc)
       if [:get, :post, :put, :delete].include?(verb.downcase.to_sym)
-        document = {:path => path, :description => (@capture || '').to_s}
+        document = {:path => path, :description => verb.upcase.to_sym.to_s + ": " + (@capture || '').to_s}
         document[:required] = @capture_required_param if @capture_required_param
         document[:optional] = @capture_optional_param if @capture_optional_param
         (@@document ||= []) << document
