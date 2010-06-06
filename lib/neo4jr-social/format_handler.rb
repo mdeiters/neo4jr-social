@@ -1,7 +1,7 @@
 module Neo4jr
   module FormatHandler
     def self.registered(app)
-      app.send :mime, :json, 'application/json'
+      app.send :mime_type, :json, 'application/json'
       app.set :assume_xhr_is_js, true
       app.helpers self
       app.before do
@@ -25,11 +25,11 @@ module Neo4jr
        
     def format(val=nil)
       unless val.nil?
-       mime_type = media_type(val)
-       fail "Unknown media type #{val}\nTry registering the extension with a mime type" if mime_type.nil?
+       type = mime_type(val)
+       fail "Unknown mime type #{val}\nTry registering the extension with a mime type" if type.nil?
 
        @format = val.to_sym
-       response['Content-Type'].sub!(/^[^;]+/, mime_type)
+       response['Content-Type'].sub!(/^[^;]+/, type)
       end
 
       @format
