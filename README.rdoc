@@ -29,11 +29,10 @@ Run start-neo4jr-social --help to see all options
 
 == Contributors
 
-====Matthew Deiters
-* Twitter  : http://twitter.com/mdeiters
-* GitHub   : https://github.com/mdeiters
-* LinkedIn : http://www.linkedin.com/in/matthewdeiters
-* Blog     : http://www.theagiledeveloper.com
+https://github.com/mdeiters
+https://github.com/klobuczek  
+https://github.com/gregormelhorn
+https://github.com/mikkorantalainen
 
 == Copyright
 
