@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{neo4jr-social}
-  s.version = "0.2.0"
+  s.version = "0.3.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Matthew Deiters"]
@@ -41,6 +41,7 @@ Gem::Specification.new do |s|
      "jetty-runtime/lib/jsp-2.1/jsp-api-2.1.jar",
      "jetty-runtime/lib/servlet-api-2.5-6.1.3.jar",
      "jetty-runtime/start.jar",
+     "jetty-runtime/webapps/neo4jr-social.war",
      "lib/neo4jr-social.rb",
      "lib/neo4jr-social/format_handler.rb",
      "lib/neo4jr-social/json_printer.rb",
@@ -57,7 +58,7 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://github.com/mdeiters/neo4jr-social}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.3.6}
+  s.rubygems_version = %q{1.3.5}
   s.summary = %q{A self-containted and lightweight REST interface to Neo4j using JRuby.}
   s.test_files = [
     "spec/format_handler_spec.rb",
