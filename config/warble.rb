@@ -5,7 +5,7 @@ Warbler::Config.new do |config|
 
   config.gems << Gem::Dependency.new("sinatra", ">= 1.0")
   config.gems << Gem::Dependency.new("json-jruby", ">= 1.4.1")
-  config.gems << Gem::Dependency.new("neo4jr-simple", ">= 0.2.1")
+  config.gems << Gem::Dependency.new("neo4jr-simple", ">= 0.2.2")
   
   config.gem_dependencies = true
   config.webxml.booter = :rack
